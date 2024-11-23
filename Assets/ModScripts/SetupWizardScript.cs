@@ -185,19 +185,10 @@ public class SetupWizardScript : MonoBehaviour {
 
 		passwordDigits = equationSystem.GeneratedPassword();
 
-		do
-			for (int i = 0; i < 6; i++)
-				randomIxes[i] = Range(0, 5);
-		while (Enumerable.Range(0, 5).Any(x => randomIxes.Count(y => x == y) >= 3));
+		randomIxes = Enumerable.Range(0, 5).SelectMany(x => Enumerable.Repeat(x, 2)).ToList().Shuffle().Take(randomIxes.Length).ToArray();
 
-		try
-		{
-			generatedPuzzle = equationSystem.GeneratedPuzzle(passwordDigits, randomIxes);
-		}
-		catch (Exception)
-		{
+		if (!equationSystem.IsSetValid(passwordDigits, randomIxes, out generatedPuzzle))
 			goto tryagain;
-		}
 
         modifiedPuzzle = generatedPuzzle.ToArray();
 

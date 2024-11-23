@@ -37,6 +37,20 @@ public class EquationSystem
         return -1;
     }
 
+    public bool IsSetValid(int[] password, int[] randomIxes, out WizardExpression[] generatedPuzzle)
+    {
+        try
+        {
+            generatedPuzzle = GeneratedPuzzle(password, randomIxes);
+            return true;
+        }
+        catch (Exception)
+        {
+            generatedPuzzle = null;
+            return false;
+        }
+    }
+
     public WizardExpression[] GeneratedPuzzle(int[] password, int[] randomIxes)
     {
         int tries = 0;
