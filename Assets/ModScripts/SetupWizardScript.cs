@@ -56,6 +56,8 @@ public class SetupWizardScript : MonoBehaviour
     private int[]  password;
     private string finalPass;
 
+    private string Shift(string s, int count) => s.Substring(s.Length - count) + s.Substring(0, s.Length - count);
+
     private Folder[] SwapFolders(int[] swaps)
     {
         var foldersSwapped = new Folder[2];
@@ -149,6 +151,7 @@ public class SetupWizardScript : MonoBehaviour
             Log($"[Setup Wizard #{moduleId}] {eq}");
         Log($"[Setup Wizard #{moduleId}] *====================*");
         Log($"[Setup Wizard #{moduleId}] The results of equations #{swEq1 + 1} and #{swEq2 + 1} have been swapped.");
+        Log($"[Setup Wizard #{moduleId}] The final password after shifting is: {finalPass}");
     }
 
     public void GeneratePasswordPuzzle(out int swEq1, out int swEq2)
@@ -220,6 +223,32 @@ public class SetupWizardScript : MonoBehaviour
                 }
 
         equations = generatedEquations.ToArray();
+
+        var x = Math.Max(generatedEquations[swEq1].Result, generatedEquations[swEq2].Result);
+        var y = Math.Min(generatedEquations[swEq1].Result, generatedEquations[swEq2].Result);
+        var op = (Operator)(Bomb.GetSerialNumberNumbers().Last() % 5);
+        int z = 0;
+
+        switch (op)
+        {
+            case Operator.Add:
+                z = x + y;
+                break;
+            case Operator.Subtract:
+                z = x - y;
+                break;
+            case Operator.Multiply:
+                z = x * y;
+                break;
+            case Operator.Divide:
+                z = x / y;
+                break;
+            case Operator.Concatenate:
+                z = 10 * x + y;
+                break;
+        }
+
+        finalPass = Shift(password.Join(""), z % password.Length);
     }
 
     private void OnDestroy()
