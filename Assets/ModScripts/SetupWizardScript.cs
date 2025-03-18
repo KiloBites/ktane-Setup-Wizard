@@ -229,26 +229,37 @@ public class SetupWizardScript : MonoBehaviour
         var op = (Operator)(Bomb.GetSerialNumberNumbers().Last() % 5);
         int z = 0;
 
-        switch (op)
+
+        try
         {
-            case Operator.Add:
-                z = x + y;
-                break;
-            case Operator.Subtract:
-                z = x - y;
-                break;
-            case Operator.Multiply:
-                z = x * y;
-                break;
-            case Operator.Divide:
-                z = x / y;
-                break;
-            case Operator.Concatenate:
-                z = 10 * x + y;
-                break;
+            switch (op)
+            {
+                case Operator.Add:
+                    z = x + y;
+                    break;
+                case Operator.Subtract:
+                    z = x - y;
+                    break;
+                case Operator.Multiply:
+                    z = x * y;
+                    break;
+                case Operator.Divide:
+                    z = x / y;
+                    break;
+                case Operator.Concatenate:
+                    z = 10 * x + y;
+                    break;
+            }
+        }
+        catch (DivideByZeroException)
+        {
+            goto tryAgain;
         }
 
         finalPass = Shift(password.Join(""), z % password.Length);
+
+
+
     }
 
     private void OnDestroy()
