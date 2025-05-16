@@ -256,7 +256,7 @@ public class SetupWizardScript : MonoBehaviour
             goto tryAgain;
         }
 
-        finalPass = Shift(password.Join(""), z % password.Length);
+        finalPass = Shift(password.Join(""), Math.Abs(z) % password.Length);
 
 
 
